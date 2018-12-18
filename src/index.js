@@ -1,15 +1,19 @@
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import * as screens from './api/screen_names';
-import Listing from './views/listing';
-import OrderFactory from './views/order_factory';
 
-const AppNavigator = createStackNavigator({
-  [screens.LISTING]: {
-    screen: Listing
-  },
-  [screens.ORDER_FACTORY]: {
-    screen: OrderFactory
+import React, {Component} from 'react';
+import { Provider } from 'react-redux';
+import AppNavigator from './navigation';
+import store from './store';
+
+export default class Root extends Component {
+    render() {
+      return (
+        <Provider store={store}>
+          <AppNavigator
+            // ref={navigatorRef => {
+            //   NavigationService.setTopLevelNavigator(navigatorRef);
+            // }}
+          />
+        </Provider>
+      );
+    }
   }
-});
-
-export default createAppContainer(AppNavigator);
