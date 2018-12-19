@@ -1,30 +1,36 @@
 import React, {Component} from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import {SmallButton} from "components";
 import { ORDER_FACTORY } from "api/screen_names";
+import {connect} from 'react-redux';
 
 class OrderItem extends Component {
   render() {
     const { itemContainer, time, customer, price, buttonsContainer } = styles;
     const {updateButton, deleteButton} = buttons;
     
-    const {update, order} = this.props;
+    const {update, _delete, order} = this.props;
+
     return (
         <View style={itemContainer}>
             <View style={price}>
+                <Text style={{fontWeight: 'bold'}}>
+                    Amount
+                </Text>
                 <Text>
-                    10.00$
+                    {order.amount}.00$
                 </Text>
             </View>
             <View style={customer}>
-                <Text>Customer</Text>
-                <Text>#{order.ID}</Text>
-                <Text>Date</Text>
+                <Text style={{fontWeight: 'bold'}}>Order #{order.ID}</Text>
+                <Text >{order.customer}</Text>
+                <Text>{order.date}</Text>
             </View>
             <View style={time}>
-                <Text>Time</Text>
+                <Text style={{fontWeight: 'bold'}}>Time</Text>
+                <Text>{order.time}</Text>
             </View>
-            <View style={buttonsContainer}>
+            {this.props.deleting !== order.ID && <View style={buttonsContainer}>
                 <SmallButton
                     title="Update"
                     onPress={update}
@@ -32,10 +38,13 @@ class OrderItem extends Component {
                     style={updateButton}/>
                 <SmallButton
                     title="Delete"
-                    onPress={() => alert('Delete')}
+                    onPress={_delete}
                     activeOpacity={0.6}
                     style={deleteButton}/>
-            </View>
+            </View>}
+            {this.props.deleting === order.ID && <View style={buttonsContainer}>
+                <ActivityIndicator size={50}/>
+            </View>}
         </View>
     );
   }
@@ -67,19 +76,24 @@ const styles = {
         flexDirection: 'row'
     },
     price: {
-        flex: 1
+        flex: 1,
+        justifyContent:'center',
     },
     customer: {
         flex: 1,
-        flexGrow: 1
+        flexGrow: 1,
+        justifyContent:'center',
     },
     time: {
         flex:1,
+        justifyContent:'center',
     },
     buttonsContainer: {
         flexShrink: 1,
         justifyContent: 'space-between'
     }
 }
-
-export default OrderItem;
+const mapStateToProps = (state) => ({
+    deleting: state.orders.deleting ? state.orders.deleting : null,
+})
+export default connect(mapStateToProps)(OrderItem);

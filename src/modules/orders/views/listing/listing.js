@@ -2,11 +2,13 @@ import React, {Component} from "react";
 import { View, FlatList, Button, Text, StyleSheet, ActivityIndicator } from "react-native";
 import OrderItem from './components/order_item';
 import {ORDER_FACTORY} from 'api/screen_names';
+
 export default class Listing extends Component {
 
     constructor(props) {
         super();
         props.get_orders();
+        
     }
 
     static navigationOptions = ({ navigation }) => ({
@@ -19,7 +21,6 @@ export default class Listing extends Component {
                     color="#00c853"
                 />
             </View>
-          
         ),
     });
 
@@ -29,6 +30,10 @@ export default class Listing extends Component {
         })
     }
 
+    _delete = (ID) => {
+        return this.props.delete_order(ID);
+    }
+
     render() {
         console.log(this.props)
         return (
@@ -36,15 +41,18 @@ export default class Listing extends Component {
                 {this.props.orders.list && <FlatList
                     style={{width: '100%'}}
                     data={this.props.orders.list}
-                    renderItem={({item}) => (
-                        <OrderItem 
+                    keyExtractor={(item) => item.ID}
+                    renderItem={({item, index}) => (
+                        <OrderItem
                             key={item.key}
                             order={item}
                             update={() => this._update(item)}
+                            _delete={() => this._delete(item.ID, index)}
                         />
                     )}
                 />}
                 {this.props.orders.gettingOrders && (<ActivityIndicator size={50}/>)}
+                {/* <FlashMessage position="top" /> */}
             </View>
         );
     }

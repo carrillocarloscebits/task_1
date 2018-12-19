@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import { View, Button, Text } from "react-native";
-
+import OrderForm from '../../components/order_form'
 export default class OrderFactory extends Component {
 
     static navigationOptions = ({navigation}) => {
@@ -30,8 +30,8 @@ export default class OrderFactory extends Component {
     render() {
         console.log(this.props)
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>ORDER FACTORY</Text>
+            <View style={{flex: 1}}>
+                <OrderForm order={this.props.navigation.getParam('order')}/>
             </View>
         );
     }

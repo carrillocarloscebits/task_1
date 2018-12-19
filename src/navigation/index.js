@@ -1,7 +1,7 @@
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import * as screens from 'api/screen_names';
-import Listing from 'views/listing';
-import OrderFactory from 'views/order_factory';
+import Listing from 'orders/views/listing';
+import OrderFactory from 'orders/views/order_factory';
 
 const AppNavigator = createStackNavigator({
   [screens.LISTING]: {
